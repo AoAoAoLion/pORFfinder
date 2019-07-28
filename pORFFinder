@@ -2,6 +2,29 @@
 
 VERSION="1.0.0"
 
+print_version(){
+  echo "pORFfinder version $VERSION, using ORFfinder " `ORFfinder -version | awk -F': ' '{ print $2 }'`
+}
+
+print_help(){
+  cat <<EOS
+Usage:
+pORFfinder --threads <number of threads> -in <fasta file> -out <fasta file> [OPTIONS] 
+pORFfinder option:
+-t|--threads	number of threads, default threads is 1
+-in|--inputfile	Input fasta file
+-O|--outdir	output directory, default dir is ./
+--tmpdir	temporary directory, default dir is ./pof.tmp
+Extra arguments will be passed through to ORFfinder
+Other:
+-v|--version	show version info
+-h|--help	program usage
+EOS
+echo "ORFfinder usage:"
+ORFfinder -help
+}
+
+
 # default arguments
 TMPDIR="$( pwd -P )/pof.tmp"
 OUTDIR="$( pwd -P )"
@@ -46,29 +69,6 @@ while [[ $# -gt 0 ]]; do
   esac
   shift
 done
-
-print_version(){
-  echo "pORFfinder version $VERSION, using ORFfinder " `ORFfinder -version | awk -F': ' '{ print $2 }'`
-}
-
-print_help(){
-  cat <<EOS
-Usage:
-pORFfinder --threads <number of threads> -in <fasta file> -out <fasta file> [OPTIONS] 
-pORFfinder option:
--t|--threads	number of threads, default threads is 1
--in|--inputfile	Input fasta file
--O|--outdir	output directory, default dir is ./
---tmpdir	temporary directory, default dir is ./pof.tmp
-Extra arguments will be passed through to ORFfinder
-Other:
--v|--version	show version info
--h|--help	program usage
-EOS
-echo "ORFfinder usage:"
-ORFfinder -help
-}
-
 
 
 if [ ! -d ${TMPDIR} ];then
