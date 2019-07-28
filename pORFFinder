@@ -1,0 +1,113 @@
+#!/bin/sh
+
+VERSION="1.0.0"
+
+# default arguments
+TMPDIR="$( pwd -P )/pof.tmp"
+OUTDIR="$( pwd -P )"
+threads=1
+
+
+# parse arguments
+while [[ $# -gt 0 ]]; do
+  key=${1}
+  case ${key} in
+    -v|--version)
+      print_version
+      exit 0
+      ;;
+    -h|--help)
+      print_help
+      exit 0
+      ;;
+    -t|--threads)
+      threads=${2}
+      shift
+      ;;
+  -in|--inputfile)
+      file=${2}
+      shift
+      ;;
+    -OD|--outdir)
+      OUTDIR="${2}"
+      shift
+      ;;
+    -out|--outfile)
+      outfile="${2}"
+      shift
+      ;;      
+    --tmpdir)
+      TMPDIR="${2}"
+      shift
+      ;;
+       -*|--*)
+      OPTIONS="${OPTIONS} ${1} ${2}"
+      ;;
+  esac
+  shift
+done
+
+print_version(){
+  echo "pORFfinder version $VERSION, using ORFfinder " `ORFfinder -version | awk -F': ' '{ print $2 }'`
+}
+
+print_help(){
+  cat <<EOS
+Usage:
+pORFfinder --threads <number of threads> -in <fasta file> -out <fasta file> [OPTIONS] 
+pORFfinder option:
+-t|--threads	number of threads, default threads is 1
+-in|--inputfile	Input fasta file
+-O|--outdir	output directory, default dir is ./
+--tmpdir	temporary directory, default dir is ./pof.tmp
+Extra arguments will be passed through to ORFfinder
+Other:
+-v|--version	show version info
+-h|--help	program usage
+EOS
+echo "ORFfinder usage:"
+ORFfinder -help
+}
+
+
+
+if [ ! -d ${TMPDIR} ];then
+	mkdir ${TMPDIR}
+else
+	rm -rf ${TMPDIR}
+	mkdir ${TMPDIR}
+fi
+
+
+split_fasta(){
+	nrows=`cat $file | wc -l`
+	split_num=`expr $nrows / $threads`
+	res=`expr $split_num % 2`
+	if [ "$res" = "0" ];then
+		split_num=$split_num
+		#echo $split_num
+	else
+		split_num=`expr $split_num + 1`
+		#echo $split_num
+	fi
+	echo "split $file $nrows lines into $threads fractions, $split_num per line."
+	split -l $split_num -d -a 2 $file ${TMPDIR}/${file}.
+	
+}
+parallel_orffinder(){
+	for i in `ls ${TMPDIR}`
+		do
+			{
+			echo "$i add to pORFfinder!"
+			ORFfinder -in ${TMPDIR}/$i -out ${TMPDIR}/${i}.ORFs ${OPTIONS} 
+			echo "$i ORFfind compelet!"
+		} &
+		done
+		wait
+		cat ${TMPDIR}/*ORFs > ${outfile}
+}
+
+#main function
+split_fasta
+parallel_orffinder
+rm -rf "${TMPDIR}"
