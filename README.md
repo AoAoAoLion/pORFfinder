@@ -1,30 +1,30 @@
 # pORFfinder
 A multi-threads alternative version of ORFfinder. 
 # Usage
-pORFfinder --threads <number of threads> -in <fasta file> -out <fasta file> [OPTIONS] 
-pORFfinder option:
--t|--threads	number of threads, default threads is 1
--in|--inputfile	Input fasta file
--O|--outdir	output directory, default dir is ./
---tmpdir	temporary directory, default dir is ./pof.tmp
-Extra arguments will be passed through to ORFfinder
-Other:
--v|--version	show version info
--h|--help	program usage
-ORFfinder usage:
-USAGE
-  ORFfinder [-h] [-help] [-xmlhelp] [-in Input_File] [-id Accession_GI]
-    [-b begin] [-e end] [-c circular] [-g Genetic_code] [-s Start_codon]
-    [-ml minimal_length] [-n nested_ORFs] [-strand Strand] [-out Output_File]
-    [-outfmt output_format] [-logfile File_Name] [-conffile File_Name]
-    [-version] [-version-full] [-dryrun]
+pORFfinder --threads <number of threads> -in <fasta file> -out <fasta file> [OPTIONS]   
+pORFfinder option:  
+-t|--threads	number of threads, default threads is 1  
+-in|--inputfile	Input fasta file  
+-O|--outdir	output directory, default dir is ./  
+--tmpdir	temporary directory, default dir is ./pof.tmp  
+Extra arguments will be passed through to ORFfinder  
+Other:  
+-v|--version	show version info  
+-h|--help	program usage  
+ORFfinder usage:  
+USAGE  
+  ORFfinder [-h] [-help] [-xmlhelp] [-in Input_File] [-id Accession_GI]  
+    [-b begin] [-e end] [-c circular] [-g Genetic_code] [-s Start_codon]  
+    [-ml minimal_length] [-n nested_ORFs] [-strand Strand] [-out Output_File]  
+    [-outfmt output_format] [-logfile File_Name] [-conffile File_Name]  
+    [-version] [-version-full] [-dryrun]  
 
-DESCRIPTION
-   Searching open reading frames in a sequence
+DESCRIPTION  
+   Searching open reading frames in a sequence  
 
-OPTIONAL ARGUMENTS
- -h
-   Print USAGE and DESCRIPTION;  ignore all other parameters
+OPTIONAL ARGUMENTS  
+ -h  
+   Print USAGE and DESCRIPTION;  ignore all other parameters  
  -help
    Print USAGE, DESCRIPTION and ARGUMENTS; ignore all other parameters
  -xmlhelp
